@@ -54,11 +54,6 @@ public class dbhandler extends SQLiteOpenHelper {
         return  cursor;
 
     }
-//    public  Cursor get_amount(){
-//        SQLiteDatabase db = this.getReadableDatabase();
-//        Cursor cursor= db.rawQuery("SELECT prices FROM prductsList",null,null);
-//        return cursor;
-//
-//    }
+
 
 }

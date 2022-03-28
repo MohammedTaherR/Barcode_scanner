@@ -61,7 +61,6 @@ TextView textView;
         pay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                make_payment();
 
                 name.clear();
                 price.clear();
