@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
 
             public void run() {
 
-                Intent i = new Intent(MainActivity.this, scan_screen.class);
+                Intent i = new Intent(MainActivity.this, siginorlogin.class);
 
                 startActivity(i);
 

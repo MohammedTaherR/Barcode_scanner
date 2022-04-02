@@ -16,6 +16,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Design.NoActionBar">
         <activity
+            android:name=".Signup"
+            android:exported="false" />
+        <activity
+            android:name=".siginorlogin"
+            android:exported="false" />
+        <activity
+            android:name=".loginActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity2"
             android:exported="false" />
         <activity
@@ -24,7 +33,8 @@
             tools:ignore="Instantiatable" />
         <activity
             android:name=".scan_screen"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/ZeroQ.NoActionBar" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
