@@ -4,21 +4,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,21 +28,40 @@ import com.google.zxing.integration.android.IntentResult;
 import java.util.ArrayList;
 
 public class scan_screen extends AppCompatActivity {
-   public static final String products="these are my product name";
-    public static final   String price="these are my product price";
-    public static final  String codeno="these are my product codeno";
 
 private Button button,button2;
 DrawerLayout drawerLayout;
-
+TextView nav_name,nav_Email;
+FirebaseAuth auth;
+FirebaseUser user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan_screen);
         button= findViewById(R.id.button);
-        drawerLayout= findViewById(R.id.drawer_layout);
 
+      auth=FirebaseAuth.getInstance();
+      user=auth.getCurrentUser();
+        drawerLayout= findViewById(R.id.drawer_layout);
         button2=findViewById(R.id.button2);
+nav_name=findViewById(R.id.Nav_Name);
+nav_Email=findViewById(R.id.Nav_Email);
+        DatabaseReference userRef= FirebaseDatabase.getInstance().getReference("Users").child(user.getUid());
+
+    userRef.addValueEventListener(new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+            String name= snapshot.child("name").getValue().toString();
+            String email= snapshot.child("email").getValue().toString();
+            nav_Email.setText("Email:"+email);
+            nav_name.setText("Name:"+name);
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
+
+        }
+    });
 
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -75,6 +92,7 @@ startActivity(intent);
     public void ClickMenu(View view){
         openDrawer(drawerLayout);
 
+
     }
 
     private static void openDrawer(DrawerLayout drawerLayout) {
@@ -99,7 +117,6 @@ startActivity(intent);
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        ArrayList<String> name = new ArrayList<>();
         DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference("products");
         IntentResult intentResult= IntentIntegrator.parseActivityResult(requestCode,resultCode,data);
 
