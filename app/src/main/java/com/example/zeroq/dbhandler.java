@@ -5,11 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.text.Editable;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
-
-import java.util.ArrayList;
 
 public class dbhandler extends SQLiteOpenHelper {
     public dbhandler(@Nullable Context context) {
@@ -18,7 +17,7 @@ public class dbhandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String mytable = " CREATE TABLE productsList( codeNumber INTEGER ,name TEXT ,prices INTEGER ); ";
+        String mytable = " CREATE TABLE productsList( codeNumber INTEGER ,name TEXT ,prices INTEGER ,quantity INTEGER); ";
         Log.d("table", mytable);
         db.execSQL(mytable);
 
@@ -29,12 +28,13 @@ public class dbhandler extends SQLiteOpenHelper {
 
     }
 
-    public Boolean addlist(String codeNumber, String name, String prices) {
+    public Boolean addlist(String codeNumber, String name, String prices, String quantity) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("codeNumber", codeNumber);
         values.put("name", name);
         values.put("prices", prices);
+        values.put("quantity",quantity);
         Long res=  db.insert("productsList",null,values);
         if(res==-1) {
             return false;

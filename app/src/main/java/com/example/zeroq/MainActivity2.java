@@ -17,12 +17,7 @@ public class MainActivity2 extends AppCompatActivity {
     ListView listView;
 Button scan , pay;
 TextView textView;
-
-
-
-
-
-    @Override
+@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
@@ -33,9 +28,7 @@ TextView textView;
         ArrayList<String> code = new ArrayList<>();
         ArrayList<String> quantity= new ArrayList<>();
         listView = findViewById(R.id.listview);
-
-
-
+        //total_amt=findViewById(R.id.textView10);
         customadapter ad = new customadapter(this, name, price, code, quantity);
         listView.setAdapter(ad);
         scan = findViewById(R.id.button5);
@@ -67,10 +60,12 @@ TextView textView;
             code.add(res.getString(0));
             name.add(res.getString(1));
             price.add(res.getString(2));
+            quantity.add(res.getString(3));
             ad.notifyDataSetChanged();
 
 
         }
+
 
 
     }

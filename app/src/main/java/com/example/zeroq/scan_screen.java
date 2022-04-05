@@ -10,8 +10,10 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,8 +26,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-
-import java.util.ArrayList;
 
 public class scan_screen extends AppCompatActivity {
 
@@ -126,18 +126,33 @@ startActivity(intent);
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     AlertDialog.Builder dialog= new AlertDialog.Builder(scan_screen.this);
-                    dbhandler db = new dbhandler(scan_screen.this);
+                   View mview=getLayoutInflater().inflate(R.layout.dialog_product,null);
+                   // dialog.setContentView(R.layout.dialog_product);
+
+         dbhandler db = new dbhandler(scan_screen.this);
                     for (DataSnapshot snapshot :dataSnapshot.getChildren()) {
                         if(intentResult.getContents().equals(snapshot.getKey())) {
-                            dialog.setTitle("your product is");
-                            dialog.setMessage(snapshot.child("name").getValue().toString());
+
+                            final EditText dialogEdittext= (EditText)mview.findViewById(R.id.dialog_edittext);
+                            final TextView dialogname= (TextView) mview.findViewById(R.id.dialog_name);
+                            final TextView dialogprice= (TextView)mview.findViewById(R.id.dialog_price);
+                            final TextView dialogcode= (TextView)mview.findViewById(R.id.dialog_codeno);
+
+                            dialogcode.setText(snapshot.getKey());
+                            dialogname.setText(snapshot.child("name").getValue().toString());
+                            dialogprice.setText(snapshot.child("price").getValue().toString());
+
+
                             dialog.setPositiveButton("Add to cart", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-
+                                    String  no_of_quantity= dialogEdittext.getText().toString();
                                     Toast.makeText(scan_screen.this, "Successfully Added", Toast.LENGTH_SHORT).show();
-
-                                    db.addlist(intentResult.getContents(),snapshot.child("name").getValue().toString(),snapshot.child("price").getValue().toString());
+                                    Intent intent = new Intent(scan_screen.this,MainActivity2.class) ;
+                                    intent.putExtra("noofquantity",no_of_quantity);
+                                    startActivity(intent);
+                                   // int no_of_quantity=0;
+                                    db.addlist(intentResult.getContents(),snapshot.child("name").getValue().toString(),snapshot.child("price").getValue().toString(),no_of_quantity);
 
                                 }
                             });
@@ -157,8 +172,10 @@ startActivity(intent);
 
 
                     }
+dialog.setView(mview);
+                    AlertDialog dialog1=dialog.create();
 
-                    dialog.show();
+                    dialog1.show();
 
                 }
 
