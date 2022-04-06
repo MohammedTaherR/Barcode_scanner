@@ -1,11 +1,11 @@
 package com.example.zeroq;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.text.Editable;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -54,6 +54,13 @@ public class dbhandler extends SQLiteOpenHelper {
         return  cursor;
 
     }
-
+    public boolean  update(String codeno,String price, String quantities) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values= new ContentValues();
+        values.put("prices"   ,price);
+        values.put("quantity",quantities);
+        db.update("productsList",values,"codeNumber = ?",new String[] {codeno});
+        return true;
+    }
 
 }

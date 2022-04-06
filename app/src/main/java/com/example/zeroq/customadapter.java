@@ -1,6 +1,4 @@
 package com.example.zeroq;
-
-;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
@@ -14,15 +12,12 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 
 import java.util.ArrayList;
-
 public class customadapter extends ArrayAdapter<String> {
-
     private final Activity context;
     private final ArrayList<String> names;
     private final ArrayList<String> prices;
     private final ArrayList<String> code;
     private  final ArrayList<String> quantity;
-
     public customadapter(Activity context, ArrayList<String> name, ArrayList<String> price, ArrayList<String> code, ArrayList<String> quantity) {
         super(context, R.layout.mylayout, name);
         this.context = context;
@@ -50,7 +45,8 @@ public class customadapter extends ArrayAdapter<String> {
         String p_price =prices.get(position);
  Integer Num_p_price = Integer.parseInt(p_price);
  int total_amt=Num_p_price*Num_p_Quantity;
-        tw2.setText(Integer.toString(total_amt));
+       // tw2.setText(Integer.toString(total_amt));
+        tw2.setText(p_price);
         String p_code = code.get(position);
         tw3.setText(p_code);
 
@@ -67,23 +63,26 @@ public class customadapter extends ArrayAdapter<String> {
                 type_NoOfQuantity=dialogView.findViewById(R.id.dialog_type_NoOfQuantity);
                 builder.setView(dialogView);
                 builder.setCancelable(false);
-
-
                 builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String After_p_price =prices.get(position);
-                        Integer after_Num_p_price = Integer.parseInt(After_p_price);
+                       // String After_p_price =prices.get(position);
+                        int Original_price = Num_p_price/Num_p_Quantity;
+//                        Integer after_Num_p_price = Integer.parseInt(After_p_price);
                         String after_No_quantity=type_NoOfQuantity.getText().toString();
-
                         Integer noofq= Integer.parseInt(after_No_quantity);
-
                         tw4.setText(Integer.toString(noofq));
-                        int after_total_amt   = noofq * after_Num_p_price;
+                        int after_total_amt   = noofq * Original_price;
                         tw2.setText(Integer.toString(after_total_amt));
+                        boolean isUpdate = db.update(p_code,Integer.toString(after_total_amt),Integer.toString(noofq));
 
-                       db.addlist(p_code,p_name, String.valueOf(after_total_amt),after_No_quantity);
-                        Toast.makeText(context, "Successfully quantity is changed", Toast.LENGTH_SHORT).show();
+                        if(isUpdate == true)
+                            Toast.makeText(context,"Quantity Updated",Toast.LENGTH_LONG).show();
+                        else
+                            Toast.makeText(context,"Quantity Not Updated",Toast.LENGTH_LONG).show();
+
+                        //db.addlist(p_code,p_name, String.valueOf(after_total_amt),after_No_quantity);
+                     //   Toast.makeText(context, "Successfully quantity is changed", Toast.LENGTH_SHORT).show();
                     }
 
                 });

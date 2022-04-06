@@ -93,18 +93,20 @@
         android:text="scan"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button3"
-        app:layout_constraintHorizontal_bias="0.144"
+        app:layout_constraintHorizontal_bias="0.075"
         app:layout_constraintStart_toStartOf="parent" />
 
-<!--    <TextView-->
-<!--        android:id="@+id/textView10"-->
-<!--        android:layout_width="163dp"-->
-<!--        android:layout_height="22dp"-->
-<!--        android:layout_marginTop="32dp"-->
-<!--        android:text="TextView"-->
-<!--        app:layout_constraintEnd_toStartOf="@+id/button3"-->
-<!--        app:layout_constraintHorizontal_bias="0.333"-->
-<!--        app:layout_constraintStart_toEndOf="@+id/button5"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/listview" />-->
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="162dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:gravity="center"
+
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toStartOf="@+id/button3"
+        app:layout_constraintHorizontal_bias="0.606"
+        app:layout_constraintStart_toEndOf="@+id/button5"
+        app:layout_constraintTop_toBottomOf="@+id/listview" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

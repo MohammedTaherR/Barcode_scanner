@@ -127,7 +127,6 @@ startActivity(intent);
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     AlertDialog.Builder dialog= new AlertDialog.Builder(scan_screen.this);
                    View mview=getLayoutInflater().inflate(R.layout.dialog_product,null);
-                   // dialog.setContentView(R.layout.dialog_product);
 
          dbhandler db = new dbhandler(scan_screen.this);
                     for (DataSnapshot snapshot :dataSnapshot.getChildren()) {
@@ -147,12 +146,22 @@ startActivity(intent);
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     String  no_of_quantity= dialogEdittext.getText().toString();
+                                     Integer Num_p_price = Integer.parseInt(snapshot.child("price").getValue().toString());
+                                     Integer Num_p_Quantity=Integer.parseInt(no_of_quantity);
+
+                                     int total_amt=Num_p_price*Num_p_Quantity;
+                                    // tw2.setText(Integer.toString(total_amt));
+
+
+
+
+
+
                                     Toast.makeText(scan_screen.this, "Successfully Added", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(scan_screen.this,MainActivity2.class) ;
                                     intent.putExtra("noofquantity",no_of_quantity);
                                     startActivity(intent);
-                                   // int no_of_quantity=0;
-                                    db.addlist(intentResult.getContents(),snapshot.child("name").getValue().toString(),snapshot.child("price").getValue().toString(),no_of_quantity);
+                                    db.addlist(intentResult.getContents(),snapshot.child("name").getValue().toString(),Integer.toString(total_amt),no_of_quantity);
 
                                 }
                             });

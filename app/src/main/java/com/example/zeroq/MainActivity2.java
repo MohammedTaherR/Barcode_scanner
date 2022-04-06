@@ -16,58 +16,65 @@ import java.util.ArrayList;
 public class MainActivity2 extends AppCompatActivity {
     ListView listView;
 Button scan , pay;
-TextView textView;
+TextView textView,total_amt;
 @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
-        dbhandler db = new dbhandler(MainActivity2.this);
-        textView = findViewById(R.id.textView);
-        ArrayList<String> name = new ArrayList<>();
-        ArrayList<String> price = new ArrayList<>();
-        ArrayList<String> code = new ArrayList<>();
-        ArrayList<String> quantity= new ArrayList<>();
-        listView = findViewById(R.id.listview);
-        //total_amt=findViewById(R.id.textView10);
-        customadapter ad = new customadapter(this, name, price, code, quantity);
-        listView.setAdapter(ad);
-        scan = findViewById(R.id.button5);
-        pay = findViewById(R.id.button3);
-        Intent intent = getIntent();
-        scan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity2.this, scan_screen.class);
-                startActivity(i);
-            }
-        });
-        pay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                name.clear();
-                price.clear();
-                code.clear();
-                quantity.clear();
-                ad.notifyDataSetChanged();
-                db.delete();
-                Toast.makeText(MainActivity2.this, "Payment Successful", Toast.LENGTH_SHORT).show();
-
-
-            }
-        });
-        Cursor res = db.getdata();
-        while (res.moveToNext()) {
-            code.add(res.getString(0));
-            name.add(res.getString(1));
-            price.add(res.getString(2));
-            quantity.add(res.getString(3));
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main2);
+    dbhandler db = new dbhandler(MainActivity2.this);
+    textView = findViewById(R.id.textView);
+    ArrayList<String> name = new ArrayList<>();
+    ArrayList<String> price = new ArrayList<>();
+    ArrayList<String> code = new ArrayList<>();
+    ArrayList<String> quantity = new ArrayList<>();
+    listView = findViewById(R.id.listview);
+    total_amt = findViewById(R.id.textView10);
+    customadapter ad = new customadapter(this, name, price, code, quantity);
+    listView.setAdapter(ad);
+    scan = findViewById(R.id.button5);
+    pay = findViewById(R.id.button3);
+    Intent intent = getIntent();
+    scan.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent i = new Intent(MainActivity2.this, scan_screen.class);
+            startActivity(i);
+        }
+    });
+    pay.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            name.clear();
+            price.clear();
+            code.clear();
+            quantity.clear();
             ad.notifyDataSetChanged();
+            db.delete();
+            Toast.makeText(MainActivity2.this, "Payment Successful", Toast.LENGTH_SHORT).show();
 
 
         }
-
+    });
+    Cursor res = db.getdata();
+    while (res.moveToNext()) {
+        code.add(res.getString(0));
+        name.add(res.getString(1));
+        price.add(res.getString(2));
+        quantity.add(res.getString(3));
+        ad.notifyDataSetChanged();
 
 
     }
 
+    //get total Amount of All products in cart
+    int total_Amount = 0;
+    for (int i = 0; i < price.size(); i++) {
+
+        total_Amount = total_Amount + Integer.parseInt(price.get(i));
+
+        total_amt.setText("Total Amount: "+total_Amount);
+
+
+    }
+}
     }
