@@ -66,9 +66,7 @@ public class customadapter extends ArrayAdapter<String> {
                 builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                       // String After_p_price =prices.get(position);
                         int Original_price = Num_p_price/Num_p_Quantity;
-//                        Integer after_Num_p_price = Integer.parseInt(After_p_price);
                         String after_No_quantity=type_NoOfQuantity.getText().toString();
                         Integer noofq= Integer.parseInt(after_No_quantity);
                         tw4.setText(Integer.toString(noofq));
@@ -81,8 +79,6 @@ public class customadapter extends ArrayAdapter<String> {
                         else
                             Toast.makeText(context,"Quantity Not Updated",Toast.LENGTH_LONG).show();
 
-                        //db.addlist(p_code,p_name, String.valueOf(after_total_amt),after_No_quantity);
-                     //   Toast.makeText(context, "Successfully quantity is changed", Toast.LENGTH_SHORT).show();
                     }
 
                 });

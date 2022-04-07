@@ -65,11 +65,9 @@ public class Signup extends AppCompatActivity {
                           rootnode=FirebaseDatabase.getInstance();
                           databaseReference=rootnode.getReference("Users");
                           DataStorage dataStorage= new DataStorage(name,email,pass);
-
                           databaseReference.child(auth.getUid()).setValue(dataStorage);
-
-                            Intent intent = new Intent(Signup.this,scan_screen.class);
-                            startActivity(intent);
+                          Intent intent = new Intent(Signup.this,scan_screen.class);
+                          startActivity(intent);
                         }else{
                             Toast.makeText(Signup.this, "Error in creating account", Toast.LENGTH_SHORT).show();
                         }
