@@ -1,7 +1,11 @@
 package com.example.zeroq;
 
+import java.util.ArrayList;
+
 public class DataStorage {
 String name, Email,password;
+
+
 
     public DataStorage(String name, String Email, String password) {
         this.Email=Email;

@@ -32,6 +32,7 @@ public class scan_screen extends AppCompatActivity {
 private Button button,button2;
 DrawerLayout drawerLayout;
 TextView nav_name,nav_Email;
+TextView chart;
 FirebaseAuth auth;
 FirebaseUser user;
     @Override
@@ -44,9 +45,20 @@ FirebaseUser user;
       user=auth.getCurrentUser();
         drawerLayout= findViewById(R.id.drawer_layout);
         button2=findViewById(R.id.button2);
+
+        chart=findViewById(R.id.Expenses_graph);
 nav_name=findViewById(R.id.Nav_Name);
 nav_Email=findViewById(R.id.Nav_Email);
-        DatabaseReference userRef= FirebaseDatabase.getInstance().getReference("Users").child(user.getUid());
+
+chart.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        Intent intent= new Intent(scan_screen.this,Expense_graph.class);
+        startActivity(intent);
+    }
+});
+
+DatabaseReference userRef= FirebaseDatabase.getInstance().getReference("Users").child(user.getUid());
 
     userRef.addValueEventListener(new ValueEventListener() {
         @Override
@@ -150,7 +162,6 @@ startActivity(intent);
                                      Integer Num_p_Quantity=Integer.parseInt(no_of_quantity);
 
                                      int total_amt=Num_p_price*Num_p_Quantity;
-                                    // tw2.setText(Integer.toString(total_amt));
 
 
 

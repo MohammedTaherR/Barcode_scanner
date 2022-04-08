@@ -26,13 +26,21 @@ import com.razorpay.PaymentResultListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class MainActivity2 extends AppCompatActivity implements  PaymentResultListener{
 
     ListView listView;
 Button scan , pay;
 TextView textView,total_amt;
+    private FirebaseAuth auth;
+    FirebaseDatabase database;
+    DatabaseReference databaseReference;
+
 @Override
     protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -56,6 +64,11 @@ TextView textView,total_amt;
             startActivity(i);
         }
     });
+                    Date c = Calendar.getInstance().getTime();
+                System.out.println("Current time => " + c);
+
+                SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
+                String formattedDate = df.format(c);
 
 
     pay.setOnClickListener(new View.OnClickListener() {
@@ -63,12 +76,14 @@ TextView textView,total_amt;
         public void onClick(View v) {
             if (!name.isEmpty() && !price.isEmpty() && !code.isEmpty() && !quantity.isEmpty()) {
 
-            Checkout checkout = new Checkout();
+
+                Checkout checkout = new Checkout();
                 checkout.setImage(R.drawable.ic_person);
                 try {
                     String Total=total_amt.getText().toString();
                     Integer Int_i= Integer.parseInt(Total);
                     int float_i=Math.round(Float.parseFloat(String.valueOf(Int_i))*100);
+
 
 
                     JSONObject options = new JSONObject();
@@ -94,6 +109,22 @@ TextView textView,total_amt;
                     ad.notifyDataSetChanged();
                     db.delete();
                     total_amt.setText("0");
+//                    auth=FirebaseAuth.getInstance();
+//                    database = FirebaseDatabase.getInstance();
+//                    databaseReference= database.getReference("Users");
+//                    DatabaseReference refUID=databaseReference.child(auth.getUid());
+//                    DatabaseReference refPurc= refUID.child("Purchase");
+//
+//                    String key = refPurc.push().getKey() ;
+//                    long x= new Date().getTime();
+//                    int y = Integer.parseInt(String.valueOf(total_amt));
+//                    PointValue pointValue= new PointValue(x,y);
+//                    refPurc.child(key).setValue(pointValue);
+
+
+//  .child(auth.getUid()).child("Purchase");
+
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
