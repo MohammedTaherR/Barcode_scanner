@@ -1,9 +1,6 @@
 package com.example.zeroq;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -13,24 +10,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.ktx.Firebase;
 import com.razorpay.Checkout;
 import com.razorpay.PaymentResultListener;
-
-import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 public class MainActivity2 extends AppCompatActivity implements  PaymentResultListener{
 
@@ -38,9 +27,8 @@ public class MainActivity2 extends AppCompatActivity implements  PaymentResultLi
 Button scan , pay;
 TextView textView,total_amt;
     private FirebaseAuth auth;
-    FirebaseDatabase database;
-    DatabaseReference databaseReference;
-
+    FirebaseDatabase rootnode;
+    DatabaseReference databaseReference,databaseReference1;
 @Override
     protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -64,11 +52,6 @@ TextView textView,total_amt;
             startActivity(i);
         }
     });
-                    Date c = Calendar.getInstance().getTime();
-                System.out.println("Current time => " + c);
-
-                SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
-                String formattedDate = df.format(c);
 
 
     pay.setOnClickListener(new View.OnClickListener() {
@@ -77,12 +60,30 @@ TextView textView,total_amt;
             if (!name.isEmpty() && !price.isEmpty() && !code.isEmpty() && !quantity.isEmpty()) {
 
 
+
+
                 Checkout checkout = new Checkout();
                 checkout.setImage(R.drawable.ic_person);
                 try {
                     String Total=total_amt.getText().toString();
                     Integer Int_i= Integer.parseInt(Total);
                     int float_i=Math.round(Float.parseFloat(String.valueOf(Int_i))*100);
+                    String Total_graph = total_amt.getText().toString();
+                    String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                    rootnode = FirebaseDatabase.getInstance();
+                    databaseReference1 = rootnode.getReference("Users").child(uid).child("purchase");
+                    databaseReference1.push().setValue(Total_graph).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+
+
+                            } else {
+
+                            }
+                        }
+                    });
+
 
 
 
@@ -102,27 +103,23 @@ TextView textView,total_amt;
                     options.put("prefill", preFill);
 
                     checkout.open(MainActivity2.this, options);
+
+
+
+
                     name.clear();
                     price.clear();
                     code.clear();
                     quantity.clear();
                     ad.notifyDataSetChanged();
                     db.delete();
+
+
                     total_amt.setText("0");
-//                    auth=FirebaseAuth.getInstance();
-//                    database = FirebaseDatabase.getInstance();
-//                    databaseReference= database.getReference("Users");
-//                    DatabaseReference refUID=databaseReference.child(auth.getUid());
-//                    DatabaseReference refPurc= refUID.child("Purchase");
-//
-//                    String key = refPurc.push().getKey() ;
-//                    long x= new Date().getTime();
-//                    int y = Integer.parseInt(String.valueOf(total_amt));
-//                    PointValue pointValue= new PointValue(x,y);
-//                    refPurc.child(key).setValue(pointValue);
 
 
-//  .child(auth.getUid()).child("Purchase");
+
+
 
 
 
@@ -172,8 +169,16 @@ String str_Amount= String.valueOf(total_Amount);
 
     @Override
     public void onPaymentSuccess(String s) {
-        Toast.makeText(this, "Payment success!", Toast.LENGTH_SHORT).show();
+        try {
+
+
+            Toast.makeText(this, "Payment success!", Toast.LENGTH_SHORT).show();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
+
+
 
     @Override
     public void onPaymentError(int i, String s) {

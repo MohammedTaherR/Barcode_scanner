@@ -3,15 +3,25 @@ package com.example.zeroq;
 import java.util.ArrayList;
 
 public class DataStorage {
-String name, Email,password;
+String name, Email,password,purchase;
 
 
 
-    public DataStorage(String name, String Email, String password) {
+    public DataStorage(String name, String Email, String password,String purchase) {
         this.Email=Email;
         this.password=password;
         this.name=name;
+        this.purchase=purchase;
     }
+
+    public String getPurchase() {
+        return purchase;
+    }
+
+    public void setPurchase(String purchase) {
+        this.purchase = purchase;
+    }
+
     public String getName() {
         return name;
     }
