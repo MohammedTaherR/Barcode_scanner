@@ -115,7 +115,7 @@ TextView textView,total_amt;
                     db.delete();
 
 
-                    total_amt.setText("0");
+
 
 
 
@@ -170,7 +170,7 @@ String str_Amount= String.valueOf(total_Amount);
     @Override
     public void onPaymentSuccess(String s) {
         try {
-
+            total_amt.setText("0");
 
             Toast.makeText(this, "Payment success!", Toast.LENGTH_SHORT).show();
         }catch (Exception e){
