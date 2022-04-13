@@ -48,5 +48,8 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation 'com.journeyapps:zxing-android-embedded:4.2.0'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+    implementation 'com.itextpdf:itextpdf:5.5.13.2'
+    implementation 'com.joanzapata.pdfview:android-pdfview:1.0.4@aar'
+
 
 }
