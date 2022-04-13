@@ -1,9 +1,20 @@
 package com.example.zeroq;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
+import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.pdf.PdfDocument;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -19,6 +30,10 @@ import com.google.firebase.ktx.Firebase;
 import com.razorpay.Checkout;
 import com.razorpay.PaymentResultListener;
 import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainActivity2 extends AppCompatActivity implements  PaymentResultListener{
@@ -26,19 +41,22 @@ public class MainActivity2 extends AppCompatActivity implements  PaymentResultLi
     ListView listView;
 Button scan , pay;
 TextView textView,total_amt;
+    int total_Amount = 0;
     private FirebaseAuth auth;
     FirebaseDatabase rootnode;
     DatabaseReference databaseReference,databaseReference1;
+    ArrayList<String> name = new ArrayList<>();
+    ArrayList<String> price = new ArrayList<>();
+    ArrayList<String> code = new ArrayList<>();
+    dbhandler db = new dbhandler(MainActivity2.this);
+    ArrayList<String> quantity = new ArrayList<>();
 @Override
     protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main2);
-    dbhandler db = new dbhandler(MainActivity2.this);
+
     textView = findViewById(R.id.textView);
-    ArrayList<String> name = new ArrayList<>();
-    ArrayList<String> price = new ArrayList<>();
-    ArrayList<String> code = new ArrayList<>();
-    ArrayList<String> quantity = new ArrayList<>();
+
     listView = findViewById(R.id.listview);
     total_amt = findViewById(R.id.textView10);
     customadapter ad = new customadapter(this, name, price, code, quantity);
@@ -107,15 +125,6 @@ TextView textView,total_amt;
 
 
 
-                    name.clear();
-                    price.clear();
-                    code.clear();
-                    quantity.clear();
-                    ad.notifyDataSetChanged();
-                    db.delete();
-
-
-
 
 
 
@@ -154,7 +163,7 @@ TextView textView,total_amt;
     }
 
     //get total Amount of All products in cart
-    int total_Amount = 0;
+
     for (int i = 0; i < price.size(); i++) {
 
         total_Amount = total_Amount + Integer.parseInt(price.get(i));
@@ -170,7 +179,52 @@ String str_Amount= String.valueOf(total_Amount);
     @Override
     public void onPaymentSuccess(String s) {
         try {
+            customadapter ad = new customadapter(this, name, price, code, quantity);
+            name.clear();
+            price.clear();
+            code.clear();
+            quantity.clear();
+ad.notifyDataSetChanged();
+            db.delete();
+
             total_amt.setText("0");
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Invoice Text");
+            builder.setMessage("This is the Demo Invoice");
+            builder.setPositiveButton("download", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Toast.makeText(MainActivity2.this, "Downloading Invoice...", Toast.LENGTH_SHORT).show();
+
+//                    ActivityCompat.requestPermissions(MainActivity2.this,new String[]{
+//                            Manifest.permission.WRITE_EXTERNAL_STORAGE}, PackageManager.PERMISSION_GRANTED);
+//                    PdfDocument pdfDocument= new PdfDocument() ;
+//                    Paint paint= new Paint();
+//                    PdfDocument.PageInfo pageInfo= new PdfDocument.PageInfo.Builder(250,400,1).create();
+//                    PdfDocument.Page page= pdfDocument.startPage(pageInfo);
+//                    Canvas canvas= page.getCanvas();
+//                    canvas.drawText("Welcome to Zeroq",40,50,paint);
+//                    pdfDocument.finishPage(page);
+//                    File file = new File(Environment.getExternalStorageDirectory(),"/trial.pdf");
+//                    try {
+//                        pdfDocument.writeTo(new FileOutputStream(file));
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                    pdfDocument.close();
+//createPDF();
+
+                    printInvoice();
+                    Toast.makeText(MainActivity2.this, "Downloading!!", Toast.LENGTH_SHORT).show();
+                }
+            });
+            builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            builder.show();
 
             Toast.makeText(this, "Payment success!", Toast.LENGTH_SHORT).show();
         }catch (Exception e){
@@ -178,6 +232,61 @@ String str_Amount= String.valueOf(total_Amount);
         }
     }
 
+    private void printInvoice() {
+
+    PdfDocument mypdfDocument= new PdfDocument();
+    Paint myPaint = new Paint();
+    String [] columns = {"Name","Price","Quantity"};
+    PdfDocument.PageInfo mypageinfo=new  PdfDocument.PageInfo.Builder(1000,900,1).create();
+    PdfDocument.Page myPage = mypdfDocument.startPage(mypageinfo);
+    Canvas canvas =myPage.getCanvas();
+    myPaint.setTextSize(80);
+    canvas.drawText("Invoice",30,80,myPaint);
+
+
+    myPaint.setTextAlign(Paint.Align.LEFT);
+myPaint.setColor(Color.rgb(150,150,150));
+canvas.drawRect(30,150,canvas.getWidth()-40,160,myPaint);
+        canvas.drawText("Name",50,200,myPaint);
+        canvas.drawText("Quantity",80,200,myPaint);
+        canvas.drawText("Price",120,200,myPaint);
+
+        int j =150;
+        int l = 50;
+for(int i=0;i<=name.size();i++){
+
+canvas.drawRect(30,j+10,canvas.getWidth()-40,160,myPaint);
+j=j+10;
+canvas.drawText(name.get(i),l,j,myPaint);
+l=l+20;
+    canvas.drawText(quantity.get(i),l+10,j,myPaint);
+    l=l+20;
+    canvas.drawText(price.get(i),l+10,j,myPaint);
+
+
+}
+myPaint.setColor(Color.BLACK);
+
+        for (int i = 0; i < price.size(); i++) {
+
+            total_Amount = total_Amount + Integer.parseInt(price.get(i));
+            String str_Amount= String.valueOf(total_Amount);
+//            total_amt.setText(str_Amount);
+
+
+
+        }
+canvas.drawText("Total="+total_amt,l,j+100,myPaint);
+mypdfDocument.finishPage(myPage);
+
+File file= new File(this.getExternalFilesDir("/"),"Invoice.pdf");
+        try {
+            mypdfDocument.writeTo(new FileOutputStream(file));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+mypdfDocument.close();
+    }
 
 
     @Override

@@ -5,6 +5,7 @@
       <map>
         <entry key="..\:/Users/Mohammed Taher/AndroidStudioProjects/ZeroQ/app/src/main/res/drawable/ic_person.xml" value="0.167" />
         <entry key="..\:/Users/Mohammed Taher/AndroidStudioProjects/ZeroQ/app/src/main/res/layout/activity_expense_graph.xml" value="0.16666666666666666" />
+        <entry key="..\:/Users/Mohammed Taher/AndroidStudioProjects/ZeroQ/app/src/main/res/layout/activity_invoice_generator.xml" value="0.15364583333333334" />
         <entry key="..\:/Users/Mohammed Taher/AndroidStudioProjects/ZeroQ/app/src/main/res/layout/activity_list_products.xml" value="0.14130434782608695" />
         <entry key="..\:/Users/Mohammed Taher/AndroidStudioProjects/ZeroQ/app/src/main/res/layout/activity_login.xml" value="0.13043478260869565" />
         <entry key="..\:/Users/Mohammed Taher/AndroidStudioProjects/ZeroQ/app/src/main/res/layout/activity_main.xml" value="0.16666666666666666" />
@@ -21,6 +22,7 @@
         <entry key="..\:/Users/Mohammed Taher/AndroidStudioProjects/ZeroQ/app/src/main/res/layout/fragment_gallery.xml" value="0.13043478260869565" />
         <entry key="..\:/Users/Mohammed Taher/AndroidStudioProjects/ZeroQ/app/src/main/res/layout/fragment_home.xml" value="0.13043478260869565" />
         <entry key="..\:/Users/Mohammed Taher/AndroidStudioProjects/ZeroQ/app/src/main/res/layout/fragment_slideshow.xml" value="0.13043478260869565" />
+        <entry key="..\:/Users/Mohammed Taher/AndroidStudioProjects/ZeroQ/app/src/main/res/layout/invoice_custom_adapter.xml" value="0.1578125" />
         <entry key="..\:/Users/Mohammed Taher/AndroidStudioProjects/ZeroQ/app/src/main/res/layout/main_nav_drawer.xml" value="0.17721518987341772" />
         <entry key="..\:/Users/Mohammed Taher/AndroidStudioProjects/ZeroQ/app/src/main/res/layout/main_toolbar.xml" value="0.13043478260869565" />
         <entry key="..\:/Users/Mohammed Taher/AndroidStudioProjects/ZeroQ/app/src/main/res/layout/mylayout.xml" value="0.27146814404432135" />
