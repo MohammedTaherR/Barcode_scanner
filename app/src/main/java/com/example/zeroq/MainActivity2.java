@@ -253,7 +253,7 @@ String str_Amount= String.valueOf(total_Amount);
                             String Quantity= invoice_Quantity.get(i);
                             String price= invoice_price.get(i);
 
-                            paragraph.add(new Paragraph(Name+"    "+Quantity+"    "+price, font));
+                            paragraph.add(new Paragraph(Name+"    "+Quantity+"       "+price, font));
                         }
                         String invoiceamount = String.valueOf(total_Amount);
                         paragraph.add(new Paragraph("Total Amount:" + invoiceamount, myfont));

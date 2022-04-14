@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,7 +29,7 @@ public class Signup extends AppCompatActivity {
     DatabaseReference databaseReference,databaseReference1;
     EditText nameEdit,passEdit,emailEdit;
     TextView login;
-    String prices = "90";
+    String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
 
 
 
@@ -60,26 +61,33 @@ public class Signup extends AppCompatActivity {
                String name= nameEdit.getText().toString();
                 String email=emailEdit.getText().toString();
                 String pass=passEdit.getText().toString();
+                if(TextUtils.isEmpty(name) ||TextUtils.isEmpty(email)  || TextUtils.isEmpty(pass)){
+                    Toast.makeText(Signup.this, "Enter valid data", Toast.LENGTH_SHORT).show();
+                }else if(!email.matches(emailPattern)){
+                    emailEdit.setError("Enter Valid Email");
+                    Toast.makeText(Signup.this, "Enter valid email", Toast.LENGTH_SHORT).show(); }
+                else{
+                    auth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
 
-                auth.createUserWithEmailAndPassword(email,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful())
-                        {
-                          rootnode=FirebaseDatabase.getInstance();
-                          databaseReference=rootnode.getReference("Users");
-                          databaseReference1=rootnode.getReference("Users").child(auth.getUid()).child("purchase");
-                          DataStorage dataStorage= new DataStorage(name,email,pass,"purchases");
-                          databaseReference.child(auth.getUid()).setValue(dataStorage);
+                            if (task.isSuccessful()) {
+
+                                rootnode = FirebaseDatabase.getInstance();
+                                databaseReference = rootnode.getReference("Users");
+                                databaseReference1 = rootnode.getReference("Users").child(auth.getUid()).child("purchase");
+                                DataStorage dataStorage = new DataStorage(name, email, pass, "purchases");
+                                databaseReference.child(auth.getUid()).setValue(dataStorage);
 
 
-                          Intent intent = new Intent(Signup.this,scan_screen.class);
-                          startActivity(intent);
-                        }else{
-                            Toast.makeText(Signup.this, "Error in creating account", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(Signup.this, scan_screen.class);
+                                startActivity(intent);
+                            } else {
+                                Toast.makeText(Signup.this, "Error in creating account", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                });
+                    });
+                }
 
 
 
