@@ -9,6 +9,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.view.View;
@@ -31,15 +32,33 @@ public class scan_screen extends AppCompatActivity {
 
 private Button button,button2;
 DrawerLayout drawerLayout;
-TextView nav_name,nav_Email;
+TextView nav_name,nav_Email,nav_logout;
 TextView chart;
 FirebaseAuth auth;
+    View decorView;
+    private  long backPressedTime;
 FirebaseUser user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan_screen);
         button= findViewById(R.id.button);
+
+
+        decorView = getWindow().getDecorView();
+        decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
+            @Override
+            public void onSystemUiVisibilityChange(int visibility) {
+                if(visibility==0){
+                    decorView.setSystemUiVisibility((View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View .SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION));
+                }
+            }
+        });
 
       auth=FirebaseAuth.getInstance();
       user=auth.getCurrentUser();
@@ -49,14 +68,41 @@ FirebaseUser user;
         chart=findViewById(R.id.Expenses_graph);
 nav_name=findViewById(R.id.Nav_Name);
 nav_Email=findViewById(R.id.Nav_Email);
+nav_logout=findViewById(R.id.nav_logout);
 
-chart.setOnClickListener(new View.OnClickListener() {
+nav_logout.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
-        Intent intent= new Intent(scan_screen.this,Expense_graph.class);
-        startActivity(intent);
+        dbhandler db = new dbhandler(scan_screen.this);
+        AlertDialog.Builder builder= new AlertDialog.Builder(scan_screen.this);
+        builder.setMessage("Do you want to logout?");
+        builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                auth.signOut();
+                db.delete();
+                SharedPreferences sharedPreferences=getSharedPreferences("loginActivity",0);
+
+                SharedPreferences.Editor editor= sharedPreferences.edit();
+                editor.putBoolean("hasLoggedin",false);
+                editor.commit();
+                Intent i = new Intent(scan_screen.this,siginorlogin.class);
+                startActivity(i);
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+
+
     }
 });
+
+
 
 DatabaseReference userRef= FirebaseDatabase.getInstance().getReference("Users").child(user.getUid());
 
@@ -67,6 +113,11 @@ DatabaseReference userRef= FirebaseDatabase.getInstance().getReference("Users").
             String email= snapshot.child("email").getValue().toString();
             nav_Email.setText("Email:"+email);
             nav_name.setText("Name:"+name);
+//            SharedPreferences sharedPreferences= getSharedPreferences("Name",0);
+//            String share_name= sharedPreferences.getString("receivename",name);
+//            SharedPreferences sharedPreferences1= getSharedPreferences("Email",0);
+//            String share_email= sharedPreferences1.getString("receiveemail",email);
+
         }
 
         @Override
@@ -74,7 +125,17 @@ DatabaseReference userRef= FirebaseDatabase.getInstance().getReference("Users").
 
         }
     });
-
+        chart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(scan_screen.this,Expense_graph.class);
+                String exp_email=nav_Email.getText().toString();
+                String exp_name=nav_name.getText().toString();
+                intent.putExtra("name",exp_name);
+                intent.putExtra("email",exp_email);
+                startActivity(intent);
+            }
+        });
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -214,6 +275,34 @@ dialog.setView(mview);
         else{
             Toast.makeText(getApplicationContext(), "OOPS,Unable to Add", Toast.LENGTH_SHORT).show();
         }
+
+    }
+    @Override
+    public void onBackPressed() {
+
+        if(backPressedTime+2000> System.currentTimeMillis()){
+            super.onBackPressed();
+            moveTaskToBack(true);
+            android.os.Process.killProcess(android.os.Process.myPid());
+            System.exit(1);
+            return;
+
+        }else{
+            Toast.makeText(getBaseContext(),"Press Back again to Exit",Toast.LENGTH_SHORT).show();
+        }
+
+        backPressedTime=System.currentTimeMillis();
+
+    }
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View .SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
 
     }
 }

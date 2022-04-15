@@ -9,13 +9,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="ClickMenu"
-        android:src="@drawable/ic_menu"
+        android:src="@drawable/ic_base_menu_redblack"
         />
     <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Home"
+        android:text="Expense Graph"
         android:textSize="20dp"
         android:textStyle="bold"
         android:textAlignment="center"

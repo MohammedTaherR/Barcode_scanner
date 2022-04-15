@@ -13,7 +13,7 @@
     </ImageView>
 
     <TextView
-        android:id="@+id/Nav_Name"
+        android:id="@+id/expense_Nav_Name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="12dp"
@@ -23,7 +23,7 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/Nav_Email"
+        android:id="@+id/expense_Nav_Email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -38,17 +38,17 @@
         android:layout_marginBottom="16dp"
         android:background="#636363"/>
 
-
     <TextView
-        android:id="@+id/Expenses_graph"
+        android:id="@+id/expense_nav_home"
         android:layout_width="match_parent"
-        android:textStyle="bold"
-        android:textSize="20dp"
         android:layout_height="wrap_content"
+        android:text="Home"
         android:textColor="@color/black"
-        android:text="Expense Graph"
+        android:textStyle="bold"
         android:padding="12dp"
+        android:textSize="20dp"
         />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="240dp"/>
@@ -56,16 +56,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-    <TextView
-        android:id="@+id/nav_logout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Logout"
-        android:textSize="20dp"
-        android:padding="12dp"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        />
+
 
     </LinearLayout>
 
