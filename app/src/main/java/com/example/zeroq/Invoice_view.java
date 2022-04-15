@@ -44,17 +44,9 @@ PDFView pdfView;
     @Override
     public void onBackPressed() {
 
-        if(backPressedTime+2000> System.currentTimeMillis()){
-            Intent intent = new Intent(Invoice_view.this,scan_screen.class);
-            startActivity(intent);
-            super.onBackPressed();
-            return;
-
-        }else{
-            Toast.makeText(getBaseContext(),"Press Back To Go Home",Toast.LENGTH_SHORT).show();
-        }
-
-        backPressedTime=System.currentTimeMillis();
+        Intent i= new Intent(Invoice_view.this,scan_screen.class);
+        startActivity(i);
+        super.onBackPressed();
 
     }    @Override
     public void onWindowFocusChanged(boolean hasFocus) {

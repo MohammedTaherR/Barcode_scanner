@@ -79,23 +79,6 @@ String expesnesName= intent.getStringExtra("name");
                 startActivity(i);
             }
         });
-//        DatabaseReference userRef= FirebaseDatabase.getInstance().getReference("Users").child(user.getUid());
-//
-//        userRef.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                String name= snapshot.child("name").getValue().toString();
-//                String email= snapshot.child("email").getValue().toString();
-//                nav_Email.setText("Email:"+email);
-//                nav_name.setText("Name:"+name);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
-//
 
 
 
@@ -162,17 +145,10 @@ String expesnesName= intent.getStringExtra("name");
     @Override
     public void onBackPressed() {
 
-        if(backPressedTime+2000> System.currentTimeMillis()){
-            super.onBackPressed();
-            Intent i = new Intent(Expense_graph.this,scan_screen.class);
-            startActivity(i);
-            return;
+        Intent i= new Intent(Expense_graph.this,scan_screen.class);
+        startActivity(i);
+        super.onBackPressed();
 
-        }else{
-            Toast.makeText(getBaseContext(),"Press Back To Go Home",Toast.LENGTH_SHORT).show();
-        }
-
-        backPressedTime=System.currentTimeMillis();
 
     }    @Override
     public void onWindowFocusChanged(boolean hasFocus) {
