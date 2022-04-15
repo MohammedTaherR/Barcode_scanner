@@ -37,8 +37,7 @@ public class Expense_graph extends AppCompatActivity {
     DrawerLayout drawerLayout;
     DatabaseReference databaseReference1;
     View decorView;
-    private  long backPressedTime;
-    FirebaseUser user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

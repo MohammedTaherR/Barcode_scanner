@@ -13,7 +13,7 @@ import java.io.File;
 
 public class Invoice_view extends AppCompatActivity {
 PDFView pdfView;
-    private  long backPressedTime;View decorView;
+View decorView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
