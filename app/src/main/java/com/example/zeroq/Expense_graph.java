@@ -50,43 +50,13 @@ public class Expense_graph extends AppCompatActivity {
         exp_nav_Email=findViewById(R.id.expense_Nav_Email);
         nav_home= findViewById(R.id.expense_nav_home);
 drawerLayout= findViewById(R.id.drawer_layout);
-Intent intent= getIntent();
-String expesnesName= intent.getStringExtra("name");
-        String expesnesEmail= intent.getStringExtra("email");
-        exp_nav_name.setText(expesnesName);
-        exp_nav_Email.setText(expesnesEmail);
-
-
-        decorView = getWindow().getDecorView();
-        decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
-            @Override
-            public void onSystemUiVisibilityChange(int visibility) {
-                if(visibility==0){
-                    decorView.setSystemUiVisibility((View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View .SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                            | View.SYSTEM_UI_FLAG_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION));
-                }
-            }
-        });
-        nav_home.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(Expense_graph.this,scan_screen.class);
-                startActivity(i);
-            }
-        });
-
-
 
         databaseReference1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 double i=1;
-               ArrayList<BarEntry> Graph_list= new ArrayList<>();
+                ArrayList<BarEntry> Graph_list= new ArrayList<>();
                 for (DataSnapshot snap : snapshot.getChildren() ){
                     String prices= snap.getValue().toString();
                     Graph_list.add( new BarEntry((float) i, Float.parseFloat(prices)));
@@ -96,8 +66,8 @@ String expesnesName= intent.getStringExtra("name");
                 BarDataSet barDataSet= new BarDataSet(Graph_list,"Times");
                 BarData barData= new BarData();
                 barData.addDataSet(barDataSet);
-                barChart.animateY(5000);
-                 barChart.getDescription().setText("Times");
+                barChart.animateY(0);
+                barChart.getDescription().setText("Times");
                 barChart.getDescription().setTextColor(Color.CYAN);
 
 
@@ -115,6 +85,24 @@ String expesnesName= intent.getStringExtra("name");
 
             }
         });
+
+        Intent intent= getIntent();
+        String expesnesName= intent.getStringExtra("name");
+        String expesnesEmail= intent.getStringExtra("email");
+        exp_nav_name.setText(expesnesName);
+        exp_nav_Email.setText(expesnesEmail);
+
+
+        nav_home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Expense_graph.this,scan_screen.class);
+                startActivity(i);
+            }
+        });
+
+
+
 
     }
     public void ClickMenu(View view){
@@ -148,16 +136,6 @@ String expesnesName= intent.getStringExtra("name");
         startActivity(i);
         super.onBackPressed();
 
-
-    }    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View .SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                | View.SYSTEM_UI_FLAG_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
 
     }
 }

@@ -177,6 +177,8 @@ String str_Amount= String.valueOf(total_Amount);
     @Override
     public void onPaymentSuccess(String s) {
         try {
+            Intent intent = new Intent(MainActivity2.this,scan_screen.class);
+            startActivity(intent);
 
             ArrayList<String> invoice_name = new ArrayList<>();
 
@@ -190,8 +192,14 @@ String str_Amount= String.valueOf(total_Amount);
                 invoice_price.add(res.getString(2));
                 invoice_Quantity.add(res.getString(3));
             }
+            for (int i = 0; i < price.size(); i++) {
 
-                total_amt.setText("0");
+                total_Amount = total_Amount + Integer.parseInt(price.get(i));
+                String str_Amount = String.valueOf(total_Amount);
+                total_amt.setText(str_Amount);
+            }
+
+//                total_amt.setText("0");
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
                 builder.setMessage("Do you want to download the Invoice?");
@@ -256,12 +264,14 @@ String str_Amount= String.valueOf(total_Amount);
                 builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        customadapter ad = new customadapter(MainActivity2.this, name, price, code, quantity);
 
                         name.clear();
                         price.clear();
                         code.clear();
                         quantity.clear();
                         db.delete();
+                        ad.notifyDataSetChanged();
                         dialog.dismiss();
                     }
                 });
