@@ -113,10 +113,6 @@ DatabaseReference userRef= FirebaseDatabase.getInstance().getReference("Users").
             String email= snapshot.child("email").getValue().toString();
             nav_Email.setText("Email:"+email);
             nav_name.setText("Name:"+name);
-//            SharedPreferences sharedPreferences= getSharedPreferences("Name",0);
-//            String share_name= sharedPreferences.getString("receivename",name);
-//            SharedPreferences sharedPreferences1= getSharedPreferences("Email",0);
-//            String share_email= sharedPreferences1.getString("receiveemail",email);
 
         }
 

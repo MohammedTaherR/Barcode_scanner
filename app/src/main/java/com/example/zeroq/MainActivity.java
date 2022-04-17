@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
-    private  long backPressedTime;
     View decorView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

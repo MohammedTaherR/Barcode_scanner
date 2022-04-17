@@ -44,12 +44,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainActivity2 extends AppCompatActivity implements  PaymentResultListener{
-    private  long backPressedTime;
+
     ListView listView;
 Button scan , pay;
 TextView textView,total_amt;
     int total_Amount = 0;
-    private FirebaseAuth auth;
     FirebaseDatabase rootnode;
     DatabaseReference databaseReference1;
     ArrayList<String> name = new ArrayList<>();
@@ -199,7 +198,6 @@ String str_Amount= String.valueOf(total_Amount);
                 total_amt.setText(str_Amount);
             }
 
-//                total_amt.setText("0");
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
                 builder.setMessage("Do you want to download the Invoice?");
