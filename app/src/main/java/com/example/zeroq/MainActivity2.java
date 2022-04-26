@@ -176,8 +176,8 @@ String str_Amount= String.valueOf(total_Amount);
     @Override
     public void onPaymentSuccess(String s) {
         try {
-            Intent intent = new Intent(MainActivity2.this,scan_screen.class);
-            startActivity(intent);
+
+
 
             ArrayList<String> invoice_name = new ArrayList<>();
 
@@ -244,9 +244,11 @@ String str_Amount= String.valueOf(total_Amount);
                             String price= invoice_price.get(i);
 
                             paragraph.add(new Paragraph(Name+"    "+Quantity+"       "+price, font));
+
                         }
                         String invoiceamount = String.valueOf(total_Amount);
                         paragraph.add(new Paragraph("Total Amount:" + invoiceamount, myfont));
+                        paragraph.add(new Paragraph("NOTE: Take ScreenShot of the invoice",myfont));
 
 
                         try {
@@ -271,6 +273,8 @@ String str_Amount= String.valueOf(total_Amount);
                         db.delete();
                         ad.notifyDataSetChanged();
                         dialog.dismiss();
+                        Intent intent = new Intent(MainActivity2.this,scan_screen.class);
+                        startActivity(intent);
                     }
                 });
                 builder.show();
