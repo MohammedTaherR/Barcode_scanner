@@ -62,10 +62,6 @@ TextView textView,total_amt;
     setContentView(R.layout.activity_main2);
 
     textView = findViewById(R.id.textView);
-
-
-
-
     listView = findViewById(R.id.listview);
     total_amt = findViewById(R.id.textView10);
     customadapter ad = new customadapter(this, name, price, code, quantity);
@@ -176,9 +172,6 @@ String str_Amount= String.valueOf(total_Amount);
     @Override
     public void onPaymentSuccess(String s) {
         try {
-
-
-
             ArrayList<String> invoice_name = new ArrayList<>();
 
             ArrayList<String> invoice_price = new ArrayList<>();
