@@ -56,6 +56,11 @@ TextView textView,total_amt;
     ArrayList<String> code = new ArrayList<>();
     dbhandler db = new dbhandler(MainActivity2.this);
     ArrayList<String> quantity = new ArrayList<>();
+    ArrayList<String> invoice_name = new ArrayList<>();
+
+    ArrayList<String> invoice_price = new ArrayList<>();
+
+    ArrayList<String> invoice_Quantity = new ArrayList<>();
 @Override
     protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -113,9 +118,6 @@ TextView textView,total_amt;
                         }
                     });
 
-
-
-
                     JSONObject options = new JSONObject();
                     options.put("name", R.string.app_name);
                     options.put("description", "Payment for Anything");
@@ -172,11 +174,7 @@ String str_Amount= String.valueOf(total_Amount);
     @Override
     public void onPaymentSuccess(String s) {
         try {
-            ArrayList<String> invoice_name = new ArrayList<>();
 
-            ArrayList<String> invoice_price = new ArrayList<>();
-
-            ArrayList<String> invoice_Quantity = new ArrayList<>();
 
             Cursor res = db.getdata();
             while (res.moveToNext()) {
@@ -190,87 +188,10 @@ String str_Amount= String.valueOf(total_Amount);
                 String str_Amount = String.valueOf(total_Amount);
                 total_amt.setText(str_Amount);
             }
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-                builder.setMessage("Do you want to download the Invoice?");
-                builder.setPositiveButton("download", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(MainActivity2.this, "Downloading Invoice...", Toast.LENGTH_SHORT).show();
-                        convertToPdf();
-                        Intent intent = new Intent(MainActivity2.this, Invoice_view.class);
-                        startActivity(intent);
-                    }
-
-                    private void convertToPdf() {
-                        String path = getExternalFilesDir(null).getAbsolutePath().toString() + "/Invoice.pdf";
-                        File file = new File(path);
-                        if (file.exists()) {
-                            try {
-                                file.createNewFile();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-
-                        }
-
-                        Document document = new Document(PageSize.A4);
-                        try {
-                            PdfWriter.getInstance(document, new FileOutputStream(file.getAbsoluteFile()));
-                        } catch (DocumentException e) {
-                            e.printStackTrace();
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        }
-                        document.open();
-
-                        Font font = new Font(Font.FontFamily.COURIER, 24);
-                        Font myfont = new Font(Font.FontFamily.COURIER, 34);
-                        Paragraph paragraph = new Paragraph();
-                        paragraph.add(new Paragraph("Invoice", myfont));
-                        paragraph.add(new Paragraph("Name     Quantity     Price ", font));
-                        for (int i = 0; i < invoice_name.size(); i++) {
-
-                            String Name = invoice_name.get(i);
-                            String Quantity= invoice_Quantity.get(i);
-                            String price= invoice_price.get(i);
-
-                            paragraph.add(new Paragraph(Name+"    "+Quantity+"       "+price, font));
-
-                        }
-                        String invoiceamount = String.valueOf(total_Amount);
-                        paragraph.add(new Paragraph("Total Amount:" + invoiceamount, myfont));
-                        paragraph.add(new Paragraph("NOTE: Take ScreenShot of the invoice",myfont));
-
-
-                        try {
-                            document.add(paragraph);
-                        } catch (DocumentException e) {
-                            e.printStackTrace();
-                        }
-
-                        document.close();
-                        Toast.makeText(MainActivity2.this, "PDF is created!", Toast.LENGTH_SHORT).show();
-                    }
-                });
-                builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        customadapter ad = new customadapter(MainActivity2.this, name, price, code, quantity);
-
-                        name.clear();
-                        price.clear();
-                        code.clear();
-                        quantity.clear();
-                        db.delete();
-                        ad.notifyDataSetChanged();
-                        dialog.dismiss();
-                        Intent intent = new Intent(MainActivity2.this,scan_screen.class);
-                        startActivity(intent);
-                    }
-                });
-                builder.show();
+            Toast.makeText(MainActivity2.this, "Downloading Invoice...", Toast.LENGTH_SHORT).show();
+            convertToPdf();
+            Intent intent = new Intent(MainActivity2.this, Invoice_view.class);
+            startActivity(intent);
 
                 Toast.makeText(this, "Payment success!", Toast.LENGTH_SHORT).show();
             }catch(Exception e){
@@ -279,6 +200,59 @@ String str_Amount= String.valueOf(total_Amount);
 
         db.delete();
         }
+
+    private void convertToPdf() {
+        String path = getExternalFilesDir(null).getAbsolutePath().toString() + "/Invoice.pdf";
+        File file = new File(path);
+        if (file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        Document document = new Document(PageSize.A4);
+        try {
+            PdfWriter.getInstance(document, new FileOutputStream(file.getAbsoluteFile()));
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        document.open();
+
+        Font font = new Font(Font.FontFamily.COURIER, 24);
+        Font myfont = new Font(Font.FontFamily.COURIER, 34);
+        Paragraph paragraph = new Paragraph();
+        paragraph.add(new Paragraph("Invoice", myfont));
+        paragraph.add(new Paragraph("Name     Quantity     Price ", font));
+        for (int i = 0; i < invoice_name.size(); i++) {
+
+            String Name = invoice_name.get(i);
+            String Quantity= invoice_Quantity.get(i);
+            String price= invoice_price.get(i);
+
+            paragraph.add(new Paragraph(Name+"    "+Quantity+"       "+price, font));
+
+        }
+        String invoiceamount = String.valueOf(total_Amount);
+        paragraph.add(new Paragraph("Total Amount:" + invoiceamount, myfont));
+        paragraph.add(new Paragraph("NOTE: Take ScreenShot of the invoice",myfont));
+
+
+        try {
+            document.add(paragraph);
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+
+        document.close();
+        Toast.makeText(MainActivity2.this, "PDF is created!", Toast.LENGTH_SHORT).show();
+
+    }
+
     @Override
     public void onPaymentError(int i, String s) {
 

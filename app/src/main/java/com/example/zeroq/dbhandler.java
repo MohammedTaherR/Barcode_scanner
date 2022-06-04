@@ -48,6 +48,11 @@ public class dbhandler extends SQLiteOpenHelper {
         db.execSQL("delete from  productsList");
         db.close();
     }
+    
+    public void deleteline(String codeNumber){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("productsList", "codeNumber=?", new String[]{codeNumber});
+    }
     public Cursor getdata (){
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor=db.rawQuery("SELECT * FROM productsList" ,null);

@@ -1,10 +1,14 @@
 package com.example.zeroq;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,7 +40,8 @@ public class customadapter extends ArrayAdapter<String> {
         TextView tw2 = (TextView) rowView.findViewById(R.id.textView4);
         TextView tw3 = (TextView) rowView.findViewById(R.id.textView5);
         TextView tw4= (TextView) rowView.findViewById(R.id.textView6);
-
+        CheckBox c= (CheckBox) rowView.findViewById(R.id.checkBox);
+//        Button remove = (Button) rowView.findViewById(R.id.button6);
         String p_quantity=quantity.get(position);
         Integer Num_p_Quantity= Integer.parseInt(p_quantity);
         tw4.setText(p_quantity);
@@ -49,14 +54,31 @@ public class customadapter extends ArrayAdapter<String> {
         tw2.setText(p_price);
         String p_code = code.get(position);
         tw3.setText(p_code);
+//remove.setVisibility(View.INVISIBLE);
+c.setText("Unselected");
+c.setOnClickListener(new View.OnClickListener() {
+    @SuppressLint("ResourceAsColor")
+    @Override
+    public void onClick(View v) {
+        if(c.isChecked()){
+            c.setTextColor(R.color.purple_500);
+            c.setText("Selected");
+//           remove.setVisibility(View.VISIBLE);
 
+        }else{
+            c.setTextColor(R.color.black);
+      c.setText("");
+//            remove.setVisibility(View.INVISIBLE);
 
+        }
+    }
+});
 
 
         tw4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // AlertDialog.Builder builder= new AlertDialog.Builder(this);
+
                 AlertDialog.Builder builder=new AlertDialog.Builder(v.getRootView().getContext());
                 View dialogView= LayoutInflater.from(v.getRootView().getContext()).inflate(R.layout.dialog_productlist,null);
                 EditText type_NoOfQuantity;
