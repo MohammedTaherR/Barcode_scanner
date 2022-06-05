@@ -2,6 +2,7 @@ package com.example.zeroq;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -96,9 +97,11 @@ c.setOnClickListener(new View.OnClickListener() {
                         tw2.setText(Integer.toString(after_total_amt));
                         boolean isUpdate = db.update(p_code,Integer.toString(after_total_amt),Integer.toString(noofq));
 
-                        if(isUpdate == true)
-                            Toast.makeText(context,"Quantity Updated",Toast.LENGTH_LONG).show();
-                        else
+                        if(isUpdate == true) {
+                            Toast.makeText(context, "Quantity Updated", Toast.LENGTH_LONG).show();
+                            Intent mIntent = new Intent(context, MainActivity2.class);
+                            context.startActivity(mIntent);
+                        } else
                             Toast.makeText(context,"Quantity Not Updated",Toast.LENGTH_LONG).show();
 
                     }

@@ -156,18 +156,16 @@ TextView textView,total_amt;
         quantity.add(res.getString(3));
         ad.notifyDataSetChanged();
 
+        total_Amount = total_Amount + Integer.parseInt(res.getString(2));
+        String str_Amount= String.valueOf(total_Amount);
+        total_amt.setText(str_Amount);
+
 
     }
 
     //get total Amount of All products in cart
 
-    for (int i = 0; i < price.size(); i++) {
 
-        total_Amount = total_Amount + Integer.parseInt(price.get(i));
-String str_Amount= String.valueOf(total_Amount);
-        total_amt.setText(str_Amount);
-
-    }
 
 }
 
