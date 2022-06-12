@@ -16,6 +16,7 @@ import android.graphics.pdf.PdfDocument;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -46,14 +47,15 @@ import java.util.ArrayList;
 public class MainActivity2 extends AppCompatActivity implements  PaymentResultListener{
 
     ListView listView;
-Button scan , pay;
-TextView textView,total_amt;
+    Button scan , pay;
+    TextView textView,total_amt;
     int total_Amount = 0;
     FirebaseDatabase rootnode;
+    static Button remove;
     DatabaseReference databaseReference1;
-    ArrayList<String> name = new ArrayList<>();
-    ArrayList<String> price = new ArrayList<>();
-    ArrayList<String> code = new ArrayList<>();
+     ArrayList<String> name = new ArrayList<>();
+     ArrayList<String> price = new ArrayList<>();
+     ArrayList<String> code = new ArrayList<>();
     dbhandler db = new dbhandler(MainActivity2.this);
     ArrayList<String> quantity = new ArrayList<>();
     ArrayList<String> invoice_name = new ArrayList<>();
@@ -61,113 +63,101 @@ TextView textView,total_amt;
     ArrayList<String> invoice_price = new ArrayList<>();
 
     ArrayList<String> invoice_Quantity = new ArrayList<>();
-@Override
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main2);
-
-    textView = findViewById(R.id.textView);
-    listView = findViewById(R.id.listview);
-    total_amt = findViewById(R.id.textView10);
-    customadapter ad = new customadapter(this, name, price, code, quantity);
-    listView.setAdapter(ad);
-    scan = findViewById(R.id.button5);
-    pay = findViewById(R.id.button3);
-    scan.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Intent i = new Intent(MainActivity2.this, scan_screen.class);
-            startActivity(i);
-        }
-    });
-
-
-    pay.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if (!name.isEmpty() && !price.isEmpty() && !code.isEmpty() && !quantity.isEmpty()) {
-                customadapter ad = new customadapter(MainActivity2.this, name, price, code, quantity);
-                name.clear();
-                price.clear();
-                code.clear();
-                quantity.clear();
-                ad.notifyDataSetChanged();
-
-
-
-
-                Checkout checkout = new Checkout();
-                checkout.setImage(R.drawable.ic_person);
-                try {
-                    String Total=total_amt.getText().toString();
-                    Integer Int_i= Integer.parseInt(Total);
-                    int float_i=Math.round(Float.parseFloat(String.valueOf(Int_i))*100);
-                    String Total_graph = total_amt.getText().toString();
-                    String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                    rootnode = FirebaseDatabase.getInstance();
-                    databaseReference1 = rootnode.getReference("Users").child(uid).child("purchase");
-                    databaseReference1.push().setValue(Total_graph).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-
-
-                            } else {
-
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main2);
+        textView = findViewById(R.id.textView);
+        listView = findViewById(R.id.listview);
+        total_amt = findViewById(R.id.textView10);
+        customadapter ad = new customadapter(this, name, price, code, quantity);
+        listView.setAdapter(ad);
+        scan = findViewById(R.id.button5);
+        remove=findViewById(R.id.button6);
+        pay = findViewById(R.id.button3);
+      //  remove.setVisibility(View.INVISIBLE);
+        scan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity2.this, scan_screen.class);
+                startActivity(i);
+            }
+        });
+listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Toast.makeText(MainActivity2.this, "this is", Toast.LENGTH_SHORT).show();
+    }
+});
+        pay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!name.isEmpty() && !price.isEmpty() && !code.isEmpty() && !quantity.isEmpty()) {
+                    customadapter ad = new customadapter(MainActivity2.this, name, price, code, quantity);
+                    name.clear();
+                    price.clear();
+                    code.clear();
+                    quantity.clear();
+                    ad.notifyDataSetChanged();
+                    Checkout checkout = new Checkout();
+                    checkout.setImage(R.drawable.ic_person);
+                    try {
+                        String Total=total_amt.getText().toString();
+                        Integer Int_i= Integer.parseInt(Total);
+                        int float_i=Math.round(Float.parseFloat(String.valueOf(Int_i))*100);
+                        String Total_graph = total_amt.getText().toString();
+                        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                        rootnode = FirebaseDatabase.getInstance();
+                        databaseReference1 = rootnode.getReference("Users").child(uid).child("purchase");
+                        databaseReference1.push().setValue(Total_graph).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                } else {
+                                }
                             }
-                        }
-                    });
-
-                    JSONObject options = new JSONObject();
-                    options.put("name", R.string.app_name);
-                    options.put("description", "Payment for Anything");
-                    options.put("send_sms_hash", true);
-                    options.put("allow_rotation", false);
-
-                    options.put("currency", "INR");
-                    options.put("amount", float_i   );
-
-                    JSONObject preFill = new JSONObject();
-                    preFill.put("email", "email");
-                    preFill.put("contact", "phone");
-
-                    options.put("prefill", preFill);
-
-                    checkout.open(MainActivity2.this, options);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-
-
+                        });
+                        JSONObject options = new JSONObject();
+                        options.put("name", R.string.app_name);
+                        options.put("description", "Payment for Anything");
+                        options.put("send_sms_hash", true);
+                        options.put("allow_rotation", false);
+                        options.put("currency", "INR");
+                        options.put("amount", float_i   );
+                        JSONObject preFill = new JSONObject();
+                        preFill.put("email", "email");
+                        preFill.put("contact", "phone");
+                        options.put("prefill", preFill);
+                        checkout.open(MainActivity2.this, options);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Toast.makeText(MainActivity2.this, "Your Cart is Empty!", Toast.LENGTH_SHORT).show();
                 }
 
-            } else {
-                Toast.makeText(MainActivity2.this, "Your Cart is Empty!", Toast.LENGTH_SHORT).show();
             }
+        });
+        Cursor res = db.getdata();
+        while (res.moveToNext()) {
+            code.add(res.getString(0));
+            name.add(res.getString(1));
+            price.add(res.getString(2));
+            quantity.add(res.getString(3));
+            ad.notifyDataSetChanged();
+
+            total_Amount = total_Amount + Integer.parseInt(res.getString(2));
+            String str_Amount= String.valueOf(total_Amount);
+            total_amt.setText(str_Amount);
+
 
         }
-            });
 
-    Cursor res = db.getdata();
-    while (res.moveToNext()) {
-        code.add(res.getString(0));
-        name.add(res.getString(1));
-        price.add(res.getString(2));
-        quantity.add(res.getString(3));
-        ad.notifyDataSetChanged();
+        //get total Amount of All products in cart
 
-        total_Amount = total_Amount + Integer.parseInt(res.getString(2));
-        String str_Amount= String.valueOf(total_Amount);
-        total_amt.setText(str_Amount);
 
 
     }
-
-    //get total Amount of All products in cart
-
-
-
-}
 
     @Override
     public void onPaymentSuccess(String s) {
@@ -191,13 +181,13 @@ TextView textView,total_amt;
             Intent intent = new Intent(MainActivity2.this, Invoice_view.class);
             startActivity(intent);
 
-                Toast.makeText(this, "Payment success!", Toast.LENGTH_SHORT).show();
-            }catch(Exception e){
-                e.printStackTrace();
-            }
+            Toast.makeText(this, "Payment success!", Toast.LENGTH_SHORT).show();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
 
         db.delete();
-        }
+    }
 
     private void convertToPdf() {
         String path = getExternalFilesDir(null).getAbsolutePath().toString() + "/Invoice.pdf";
@@ -259,11 +249,9 @@ TextView textView,total_amt;
     @Override
     public void onBackPressed() {
 
-            Intent i= new Intent(MainActivity2.this,scan_screen.class);
-            startActivity(i);
-            super.onBackPressed();
-
-
+        Intent i= new Intent(MainActivity2.this,scan_screen.class);
+        startActivity(i);
+        super.onBackPressed();
 
     }
 

@@ -49,9 +49,11 @@ public class dbhandler extends SQLiteOpenHelper {
         db.close();
     }
     
-    public void deleteline(String codeNumber){
+    public void deleteline(int id){
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete("productsList", "codeNumber=?", new String[]{codeNumber});
+     //db.execSQL("delete from productsList where codeNumber=id");
+   db.delete("productsList", "codeNumber=?", new String[]{String.valueOf(id)});
+      db.close();
     }
     public Cursor getdata (){
         SQLiteDatabase db = this.getWritableDatabase();

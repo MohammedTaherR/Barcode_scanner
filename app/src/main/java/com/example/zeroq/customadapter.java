@@ -10,6 +10,7 @@ import android.webkit.WebView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +24,7 @@ public class customadapter extends ArrayAdapter<String> {
     private final ArrayList<String> prices;
     private final ArrayList<String> code;
     private  final ArrayList<String> quantity;
+
     public customadapter(Activity context, ArrayList<String> name, ArrayList<String> price, ArrayList<String> code, ArrayList<String> quantity) {
         super(context, R.layout.mylayout, name);
         this.context = context;
@@ -31,9 +33,9 @@ public class customadapter extends ArrayAdapter<String> {
         this.code = code;
         this.quantity = quantity;
     }
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
+         ArrayList<Boolean> mcheck = null;
         LayoutInflater inflater = context.getLayoutInflater();
         dbhandler db = new dbhandler(getContext());
         View rowView = inflater.inflate(R.layout.mylayout, null, true);
@@ -42,7 +44,6 @@ public class customadapter extends ArrayAdapter<String> {
         TextView tw3 = (TextView) rowView.findViewById(R.id.textView5);
         TextView tw4= (TextView) rowView.findViewById(R.id.textView6);
         CheckBox c= (CheckBox) rowView.findViewById(R.id.checkBox);
-//        Button remove = (Button) rowView.findViewById(R.id.button6);
         String p_quantity=quantity.get(position);
         Integer Num_p_Quantity= Integer.parseInt(p_quantity);
         tw4.setText(p_quantity);
@@ -55,25 +56,48 @@ public class customadapter extends ArrayAdapter<String> {
         tw2.setText(p_price);
         String p_code = code.get(position);
         tw3.setText(p_code);
-//remove.setVisibility(View.INVISIBLE);
-c.setText("Unselected");
-c.setOnClickListener(new View.OnClickListener() {
-    @SuppressLint("ResourceAsColor")
-    @Override
-    public void onClick(View v) {
-        if(c.isChecked()){
-            c.setTextColor(R.color.purple_500);
-            c.setText("Selected");
-//           remove.setVisibility(View.VISIBLE);
+MainActivity2.remove.setVisibility(View.INVISIBLE);
+//c.setText("Unselected");
+        c.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    MainActivity2.remove.setVisibility(View.VISIBLE);
+                    MainActivity2.remove.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                          //  Toast.makeText(context, "Removed "+position, Toast.LENGTH_SHORT).show();
+                            if(c.isChecked()){
+                              // Toast.makeText(context, ""+code.get(position), Toast.LENGTH_SHORT).show();
+                                db.deleteline(Integer.parseInt(code.get(position)));
+                                names.remove(position);
+                                prices.remove(position);
+                                code.remove(position);
+                                quantity.remove(position);
+                                notifyDataSetChanged();
 
-        }else{
-            c.setTextColor(R.color.black);
-      c.setText("");
-//            remove.setVisibility(View.INVISIBLE);
 
-        }
-    }
-});
+                                Intent intent = new Intent(context, scan_screen.class);
+                                context.startActivity(intent);
+                            }else {
+                                Toast.makeText(context, "Nothing is selected", Toast.LENGTH_SHORT).show();
+                            }
+
+
+
+                        }
+
+                    });
+
+
+                }else {
+                   MainActivity2.remove.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
+
+
 
 
         tw4.setOnClickListener(new View.OnClickListener() {
