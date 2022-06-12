@@ -75,8 +75,6 @@ MainActivity2.remove.setVisibility(View.INVISIBLE);
                                 code.remove(position);
                                 quantity.remove(position);
                                 notifyDataSetChanged();
-
-
                                 Intent intent = new Intent(context, scan_screen.class);
                                 context.startActivity(intent);
                             }else {
